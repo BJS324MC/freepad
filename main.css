@@ -1,0 +1,25 @@
+#textbox, #placeholder {
+    outline:0;
+    padding:4%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.note{
+    position:absolute;
+    min-height: 22px;
+    cursor: move;
+    z-index: 1;
+    width:20%;
+    padding: 20px 5%;
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background: rgba(165,233,84,0.8);
+}
+.note > span{
+    outline: 0;
+}
+#placeholder {
+    z-index: -1;
+    user-select: none;
+    color:rgb(152,152,152);
+    position:fixed;
+}
