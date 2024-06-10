@@ -21,5 +21,9 @@
     z-index: -1;
     user-select: none;
     color:rgb(152,152,152);
-    position:fixed;
+    position: absolute;
+}
+.dark{
+    background-color: #161638;
+    color: #f7f06c;
 }

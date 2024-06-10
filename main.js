@@ -4,18 +4,20 @@
  * notes:[['35','200','note text here'],['45','0','note text here']]
  * }
  */
-let double = false, t, count = 0,
-    save = JSON.parse(localStorage.getItem('padSave') || '{"pad":"","notes":{}}');
+let clicks = 0, t, count = 0,
+    save = {"pad":"","notes":{},"toggle": false},
+    load = JSON.parse(localStorage.getItem('padSave'));
+
+    save.pad = load?.pad || "";
+save.toggle = load?.toggle || false;
 
 const div = document.getElementById('textbox'),
     span = document.getElementById('placeholder'),
     notes = document.getElementById('notes'),
     preventDefault = e => e.preventDefault(),
-    createNote = (x, y, txt = 'New Note', saving = true) => {
-        if (saving) {
-            save.notes[count] = [x, y, txt];
-            localStorage.setItem('padSave', JSON.stringify(save));
-        }
+    createNote = (x, y, txt = 'New Note') => {
+        save.notes[count] = [x, y, txt];
+        localStorage.setItem('padSave', JSON.stringify(save));
         let index = count++,
             note = document.createElement('div'),
             noteContent = document.createElement('span');
@@ -29,6 +31,13 @@ const div = document.getElementById('textbox'),
             if (noteContent.innerText === '') {
                 note.remove();
                 delete save.notes[index];
+                localStorage.setItem('padSave', JSON.stringify(save));
+            } else if (noteContent.innerText === '@toggle') {
+                note.remove();
+                save.toggle = !save.toggle;
+                save.toggle ? document.body.className = "dark" : document.body.className = "";
+                delete save.notes[index];
+                localStorage.setItem('padSave', JSON.stringify(save));
             } else {
                 save.notes[index][2] = noteContent.innerText;
                 localStorage.setItem('padSave', JSON.stringify(save));
@@ -37,20 +46,20 @@ const div = document.getElementById('textbox'),
         note.appendChild(noteContent);
         notes.appendChild(note);
     },
-    checkDouble = () => {
-        if (!double) {
-            double = true;
-            t = setTimeout(() => double = false, 300);
-        } else {
-            double = false;
-            createNote(35, div.scrollTop + 200);
+    checkClicks = () => {
+        clicks++;
+        if (clicks === 1) t = setTimeout(() => clicks = 0, 400); 
+        else if (clicks === 3){
+            clicks = 0;
+            createNote(35, scrollY + 200);
             clearTimeout(t);
         }
     }
 div.focus();
+save.toggle ? document.body.className = "dark" : document.body.className = "";
 div.innerText = save.pad;
 span.innerText = div.innerText === '' ? 'Type here to start!' : '';
-for (let i in save.notes) createNote(save.notes[i][0], save.notes[i][1], save.notes[i][2], false);
+for (let i in load?.notes) createNote(load.notes[i][0], load.notes[i][1], load.notes[i][2]);
 
 div.addEventListener('input', () => {
     span.innerText = div.innerText === '' ? 'Type here to start!' : '';
@@ -60,7 +69,7 @@ div.addEventListener('input', () => {
 
 addEventListener('mousedown', e => {
     if (window.DocumentTouch && window.document instanceof DocumentTouch || window.navigator.maxTouchPoints || window.navigator.msMaxTouchPoints) return;
-    checkDouble();
+    checkClicks();
     let targ = e.target;
     if (targ.className != 'note') return;
     const offsetX = e.clientX / innerWidth * 100, offsetY = e.clientY,
@@ -86,7 +95,7 @@ addEventListener('mousedown', e => {
 });
 
 addEventListener('touchstart', e => {
-    checkDouble();
+    checkClicks();
     let targ = e.touches[0].target;
     if (targ.className != 'note') return;
     const offsetX = e.touches[0].clientX / innerWidth * 100, offsetY = e.touches[0].clientY,
