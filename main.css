@@ -3,6 +3,9 @@
     padding:4%;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+#textbox > img{
+    width:20%;
+}
 .note{
     position:absolute;
     min-height: 22px;
@@ -16,6 +19,9 @@
 }
 .note > span{
     outline: 0;
+}
+.note > img{
+    width: 20%;
 }
 #placeholder {
     z-index: -1;

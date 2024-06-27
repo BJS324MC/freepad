@@ -5,10 +5,10 @@
  * }
  */
 let clicks = 0, t, count = 0,
-    save = {"pad":"","notes":{},"toggle": false},
+    save = { "pad": "", "notes": {}, "toggle": false },
     load = JSON.parse(localStorage.getItem('padSave'));
 
-    save.pad = load?.pad || "";
+save.pad = load?.pad || "";
 save.toggle = load?.toggle || false;
 
 const div = document.getElementById('textbox'),
@@ -48,8 +48,8 @@ const div = document.getElementById('textbox'),
     },
     checkClicks = () => {
         clicks++;
-        if (clicks === 1) t = setTimeout(() => clicks = 0, 400); 
-        else if (clicks === 3){
+        if (clicks === 1) t = setTimeout(() => clicks = 0, 400);
+        else if (clicks === 3) {
             clicks = 0;
             createNote(35, scrollY + 200);
             clearTimeout(t);
